@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>surprise website</title>
+<style>
+  :root{--bg:#83d8e7;--card:#70e7e5;--text:#e6eef8}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#6fdee1 0%, #072327 100%);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .wrap{width:100%;max-width:980px}
+  .lock, .content{background:rgba(255,255,255,0.02);border-radius:12px;padding:28px;box-shadow:0 6px 22px rgba(2,6,23,0.6)}
+  .title{font-size:20px;margin:0 0 10px}
+  .hint{opacity:0.7;font-size:13px;margin-bottom:14px}
+  .controls{display:flex;gap:8px}
+  input[type="password"]{flex:1;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text);outline:none}
+  button{padding:10px 12px;border-radius:8px;border:0;background:#2563eb;color:#fff;cursor:pointer}
+  .err{color:#df1111;margin-top:8px;height:18px}
+  /* gallery */
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+  .gallery img{width:100%;height:160px;object-fit:cover;border-radius:8px;display:block}
+  p.desc{margin-top:14px;line-height:1.5;color:rgba(230,238,248,0.95)}
+  /* small screens */
+  @media (max-width:640px){
+    .gallery img{height:110px}
+    .gallery{grid-template-columns:repeat(2,1fr)}
+    img {
+      width: 100%;
+      max-width: 300px;
+      height: 200px;
+      object-fit: cover;
+    }
+
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div id="lockBox" class="lock">
+      <h2 class="title">💌Enter Password to get your surprise 💌</h2>
+      <div class="hint">Type the secret password and press Open</div>
+      <div class="controls">
+        <input id="pw" type="password" placeholder="Password" />
+        <button id="openBtn">Open</button>
+      </div>
+      <div class="err" id="err"></div>
+    </div>
+
+    <div id="content" class="content" style="display:none;margin-top:18px">
+      <h2 class="title">💝💝 Surprise 💝💝</h2>
+      <div class="gallery" id="gallery">
+        <!-- 9 images -->
+        <img src="img1.jpg" alt="1">
+        <img src="img2.jpg" alt="2">
+        <img src="img3.jpg" alt="3">
+        <img src="img4.jpg" alt="4">
+        <img src="img5.jpg" alt="5">
+        <img src="img6.jpg" alt="6">
+        <img src="img7.jpg" alt="7">
+        <img src="img8.jpg" alt="8">
+        <img src="img9.jpg" alt="9">
+      </div>
+      <p class="desc">রূপশা,
+যেদিন থেকে তোমাকে দেখেছি, সেই দিন থেকে তোমার চোখ আমি আজও ভুলতে পারিনি। তোমার প্রথম ড্রেস, প্রথম হাসি, প্রথম আই কনট্যাক্ট—সবকিছু এখনো আমার মনে একদম স্পষ্ট। আজ তোমার ১৮তম জন্মদিনে, আমি তোমার বয়ফ্রেন্ড, বেস্ট ফ্রেন্ড আর সবথেকে বড় সাপোর্টার হিসেবে তোমাকে শুভেচ্ছা জানাচ্ছি। 😎💖
+আমি জানি হয়তো সবকিছু পারফেক্ট করতে পারিনি, কিন্তু যে এফোর্ট আমি রেখেছি, সেটা সব তোমাকে খুশি করার জন্য। তুমি আমার সবচেয়ে স্পেশাল, আমার দিন শুরু হয় তোমার কথা ভেবে আর শেষ হয় তোমার হাসি ভেবে। 😘
+আমি চাই তুমি সবসময় নিরাপদ, খুশি আর আমার সাথে থাকলে কনফিডেন্ট ফিল করো। আমার ছোট্ট সারপ্রাইজটা হয়তো ছোট, কিন্তু সব ভালোবাসা, যত্ন আর একটু মজা দিয়ে আমি রেখেছি—আমি আশা করি তুমি পছন্দ করবে। 😉💕
+আমি তোমাকে ভালোবাসি! ❤</p>
+    </div>
+  </div>
+
+<script>
+(function(){
+  // CHANGE THIS to your password (Note: easy to find in source)
+  const PASSWORD = '2117';
+
+  const openBtn = document.getElementById('openBtn');
+  const pwInput = document.getElementById('pw');
+  const err = document.getElementById('err');
+  const lockBox = document.getElementById('lockBox');
+  const content = document.getElementById('content');
+
+  function unlock(){
+    const val = pwInput.value || '';
+    if(val === PASSWORD){
+      lockBox.style.display = 'none';
+      content.style.display = 'block';
+      // optional: clear pw
+      pwInput.value = '';
+      err.textContent = '';
+    } else {
+      err.textContent = 'Wrong password — try again';
+      // small shake animation
+      lockBox.animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:200,iterations:1});
+    }
+  }
+
+  openBtn.addEventListener('click',unlock);
+  pwInput.addEventListener('keydown',function(e){
+    if(e.key === 'Enter') unlock();
+  });
+
+  // Optional: if you want to obfuscate password in source, you could store a base64 or hashed version
+  // but remember: client-side obfuscation is not secure.
+})();
+</script>
+</body>
+</html>
